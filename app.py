@@ -2,7 +2,7 @@
 import streamlit as st
 import pandas as pd
 
-# Custom CSS for styling
+# Custom CSS styling
 st.markdown("""
     <style>
         body {
@@ -111,26 +111,27 @@ def format_and_style(df):
         df_styled[col] = df_styled[col].apply(
             lambda x: f"{int(float(x)):,}" if str(x).replace(',', '').replace('.', '').isdigit() else x
         )
-    styles = df_styled.style.set_table_styles([
+    styled = df_styled.style.set_table_styles([
         {"selector": "th", "props": [("text-align", "center"), ("font-weight", "bold")]},
         {"selector": "td", "props": [("text-align", "right")]}
     ])
-    styles = styles.apply(
+    styled = styled.apply(
         lambda row: ['font-weight: bold; background-color: #eeeeee' if row.name == 0 else '' for _ in row],
         axis=1
     )
-    return styles
+    return styled
 
 with st.form("input_form"):
     csi_score = st.slider("CSI score (out of 1,000)", 0, 1000, 870)
     col1, col2 = st.columns(2)
     with col1:
-        initial_customers = st.number_input("Sample size (Volvo Selekt sales)", min_value=1, value=100, format="%,d")
-        ownership_duration = st.number_input("Ownership duration (years)", min_value=1, value=2, format="%,d")
-        vehicle_profit = st.number_input("Vehicle sale profit", min_value=0, value=1225, format="%,d")
+        initial_customers = st.number_input("Sample size (Volvo Selekt sales)", min_value=1, value=100)
+        ownership_duration = st.number_input("Ownership duration (years)", min_value=1, value=2)
+        vehicle_profit = st.number_input("Vehicle sale profit", min_value=0, value=1225)
     with col2:
-        service_profit = st.number_input("Service profit per year per customer", min_value=0, value=350, format="%,d")
-        warranty_duration = st.number_input("Volvo Selekt warranty (years)", min_value=1, value=3, format="%,d")
+        service_profit = st.number_input("Service profit per year per customer", min_value=0, value=350)
+        warranty_duration = st.number_input("Volvo Selekt warranty (years)", min_value=1, value=3)
+
     submitted = st.form_submit_button("Run simulation")
 
 if submitted:
